@@ -1,2 +1,84 @@
-# ergo-lend-documentation
-Documentation
+# Ergo-Lend
+A lending platform that is charity based.
+
+## Lend Components
+### Tokens 
+1. **Lend Service NFT**: It’s a unique token in the lend service box. Since the lend service box contains all system settings, it’s a piece of sensitive information, so lending fund will verify the service box with its NFT.
+2. **Lend Service Token**: Each legitimate lending pool created by our service should be distinguishable from other boxes with the same contract. Each lending pool has a LST. The lending service box contains a bunch of LSTs at its genesis.
+
+### Addresses & Contracts
+1. **Lend Service**: It’s a box that contains all the service information and also the LSTs. It’s different from the LSNFT. 
+It’s use to:
+Keep track of information. This box is used during:
+	- [ ] The creation of a funding box
+	- [ ] Completing the funded Repayment Box
+2. **Lending Box**: This is the address that lenders will send to. It’s distinguishable with other boxes based on the LSNFT. 
+Whenever a lender fund the box, they add their PK to the funding box with how much they funded for returning and refund purposes.
+When and only when a funding box is full, the borrower is allowed to spend it, and the value will be split into three boxes. 
+	- [ ] A service fee box for the ergo-lend team.
+	- [ ] A repayment box with 0 value.
+	- [ ]  and the rest to the borrower himself.
+3. **Repayment Box**:  When borrowers starts to repay what they owe, he essentially adds more value to the this address. 
+Borrower will send ERGs through a proxy address to add the funds into this address.
+When the address value reaches the owed amount, it will spend all its value and sends the proper amount back to the lenders.
+When Repayment Box is spent, it’s outputs are:
+	- [ ] Ergs to all lenders for what they are owed
+4. **Proxy Contracts**: These are addresses that stores value and data to be used for payments, and proxies for the creation of the respective output boxes. 
+In this system, we have 3:
+	- [ ] Creation of Lending Box
+	- [ ] Funding of Lending Box
+	- [ ] Funding of Repayment Box
+
+
+### Lending Life Cycle and/or Transactions
+#### Phase 1: Initiating a Lending Box
+To start a lending box, the borrower needs to enter the information required. These includes:
+1. Borrower’s PK
+2. Name
+3. Description
+4. Goal
+5. Deadline
+6. Interest Rate
+7. Length of time to repay after spending it (with a max limit)
+
+They then pay the creation fee to create the lending box. 
+
+The steps are done accordingly:
+1. **Payment**: The borrower must pay the required fee to the creation proxy contract.
+
+#### Phase 2: Lending Spree
+Lenders can then choose to fund a lending box. To fund a lending box, the lenders funds it through a proxy contract. This lending transaction will increase the value of funding box up till it’s required amount. After that, it will not accept more.
+If a lender accidentally sends more than needed, the change will be return to them. 
+
+#### Phase 3: Borrower Funded
+When the funding box is full. The borrower can spend the box. (Note, if the box is fully funded, borrower can spent it after the deadline too)
+After spending the box, the funding transaction will send the service fee to the ergo-lend team, create a repayment box with minimum(or 0 if allowed) with respective registered filled with:
+1. Collection of Lenders PK mapped to their donated amount.
+2. Name
+3. Description
+4. Borrowers PK
+5. Interests Rate
+6. Total Funded
+7. Length of time **left** to repay funds
+
+Amount owed is calculated like this:
+Amount Owed = Funding + (Funding * Interest Rate)
+
+And the rest of the funds go to the borrower.
+
+#### Phase 4: Repayment
+The borrower will then start paying back what he owes by sending his payment through a proxy contract to fund the repayment box. 
+
+In this stage, the repayment box is public. Therefore anyone who is interested in helping them out can send funds through the proxy contract to the box too. 
+
+#### Phase 5: Debt Repaid
+When the repayment is fully funded (initial fund goal + interest rate). The repayment box will be spent, and returns the funds + interest rate to each lender. 
+
+When the repayment box is fully funded, the service box and the last payment will all be destroyed as the input of the repaid transaction to output the value to be sent back to the lenders address, repayment box burned, and Service box receives it’s LST count +1.
+
+#### Phase 3.1: Lending Funds Unfunded
+In a situation where the funds is not fully funded. The box can be spent so that the funds (alongside the service box) within the box goes back to its respective owner.
+
+
+#ergo-lend
+
