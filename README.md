@@ -80,10 +80,10 @@ When the repayment box is fully funded, the service box and the last payment wil
 In a situation where the funds is not fully funded. The box can be spent so that the funds (alongside the service box) within the box goes back to its respective owner.
 
 <p align="center">
-<img src="Images/lendingTransact.jpg">
+<img src="images/lendingTransact.jpg">
 </p>
 <p align="center">
-<img src="Images/fullyFunded.jpg">
+<img src="images/fullyFunded.jpg">
 </p>
 
 #ergo-lend
